@@ -26,15 +26,19 @@ public class MainActivity extends FragmentActivity {
         viewPager = findViewById(R.id.viewpager2);
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1,false);    //默认界面为第二页(中间页)
     }
 
     @Override
     public void onBackPressed() {
-        if(viewPager.getCurrentItem() == 0) {
+        if(viewPager.getCurrentItem() == 1) {   //第二页可响应返回按钮，关闭应用
             super.onBackPressed();
         }
-        else {
+        else if (viewPager.getCurrentItem() == 2){  //第三页响应返回按钮，返回第二页
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+        else {  //第一页响应返回按钮，返回第二页
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
     }
 

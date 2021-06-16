@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class ScreenSlidePagerAdapter extends FragmentStateAdapter {
-    private static int NUM_PAGES = 3;
     public ScreenSlidePagerAdapter(FragmentActivity fa){
         super(fa);
     }
@@ -17,14 +16,21 @@ public class ScreenSlidePagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         Fragment fragment = new ScreenFragment();
+        Fragment fragment1 = new Fragment2();
         Bundle args = new Bundle();
         args.putInt(ScreenFragment.ARG_OBJECT,position+1);
         fragment.setArguments(args);
-        return fragment;
+        switch (position){  //切换不同的fragment
+            case 1: return fragment1;
+            case 0:
+            case 2:
+            default: return fragment;
+
+        }
     }
 
     @Override
     public int getItemCount() {
-        return NUM_PAGES;
+        return 3;   //定义页数
     }
 }
