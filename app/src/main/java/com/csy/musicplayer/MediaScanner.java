@@ -1,3 +1,7 @@
+/*
+src: https://binkery.com/archives/473.html
+ */
+
 package com.csy.musicplayer;
 
 import android.content.Context;

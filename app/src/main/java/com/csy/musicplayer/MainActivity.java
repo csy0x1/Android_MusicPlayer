@@ -1,20 +1,18 @@
 package com.csy.musicplayer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.File;
 
@@ -26,6 +24,7 @@ public class MainActivity extends FragmentActivity {
 
     String filepath = String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
 
+    public static MediaPlayer mediaPlayer = new MediaPlayer();  //java中的全局变量是由public修饰的static成员变量
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +35,34 @@ public class MainActivity extends FragmentActivity {
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1,false);    //默认界面为第二页(中间页)
+
         requestForPermission();
-        MediaScanner ms = new MediaScanner(this);
+
+        MediaScanner mediaScanner = new MediaScanner(this);
         File file = new File(filepath);
-        ms.scanFile(file,"");
+        mediaScanner.scanFile(file,"");
+
+        Button start = (Button) findViewById(R.id.start);
+        Button pause = (Button) findViewById(R.id.pause);
+        Button stop = (Button) findViewById(R.id.stop);
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mediaPlayer.isPlaying()){
+                    mediaPlayer.start();
+                }
+            }
+        });
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                }
+            }
+        });
     }
 
     @Override
@@ -75,12 +98,25 @@ public class MainActivity extends FragmentActivity {
     }
 
     public boolean canAccessExternalSd() {
-        return (hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE));
+        return (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
     }
 
     private boolean hasPermission(String perm) {
         return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, perm));
 
+    }
+
+    //初始化MediaPlayer
+    public void initMediaPlayer(Song song) {
+        try{
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(song.getPath());  //指定音频文件的路径
+            mediaPlayer.prepare();  //让MediaPlayer进入到准备状态
+            mediaPlayer.start();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
