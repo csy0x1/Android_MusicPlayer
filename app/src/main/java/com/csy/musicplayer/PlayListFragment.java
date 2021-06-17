@@ -19,10 +19,6 @@ public class PlayListFragment extends Fragment {
         return (ViewGroup) inflater.inflate(R.layout.playlist,container,false);
     }
 
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        Bundle args = getArguments();
-//        ((TextView) view.findViewById(R.id.textView))
-//                .setText(Integer.toString(args.getInt(ARG_OBJECT)));
-//    }
+
+
 }
