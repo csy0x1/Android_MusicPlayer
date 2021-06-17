@@ -15,16 +15,17 @@ public class ScreenSlidePagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment fragment = new ScreenFragment();
-        Fragment fragment1 = new Fragment2();
+        Fragment playList = new PlayListFragment();
+        Fragment nowPlaying = new NowPlayingFragment();
+        Fragment Setting = new SettingFragment();
         Bundle args = new Bundle();
-        args.putInt(ScreenFragment.ARG_OBJECT,position+1);
-        fragment.setArguments(args);
+        args.putInt(PlayListFragment.ARG_OBJECT,position+1);
+        playList.setArguments(args);
         switch (position){  //切换不同的fragment
-            case 1: return fragment1;
-            case 0:
-            case 2:
-            default: return fragment;
+            case 0: return playList;
+            default:
+            case 1: return nowPlaying;
+            case 2: return Setting;
 
         }
     }
