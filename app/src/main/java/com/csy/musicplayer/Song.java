@@ -4,11 +4,13 @@ public class Song {
     private String Title;
     private String Artist;
     private String Path;
+    private String Album;
 
-    public Song(String Title,String Artist,String Path){
+    public Song(String Title,String Artist,String Path,String Album){
         this.Title = Title;
         this.Artist = Artist;
         this.Path = Path;
+        this.Album = Album;
     }
 
 
@@ -22,6 +24,10 @@ public class Song {
 
     public String getPath(){
         return Path;
+    }
+
+    public String getAlbum(){
+        return Album;
     }
 }
 

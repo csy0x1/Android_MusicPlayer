@@ -3,4 +3,7 @@
     <string name="playlist">播放列表</string>
     <string name="playing">正在播放</string>
     <string name="setting">设置</string>
+    <string name="previous">上一首</string>
+    <string name="next">下一首</string>
+    <string name="play">播放</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.csy.musicplayer;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,6 +31,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+import static com.csy.musicplayer.MainActivity.currentPlaying;
+import static com.csy.musicplayer.MainActivity.songList;
+
 
 public class PlayListFragment extends Fragment {
 
@@ -36,11 +42,12 @@ public class PlayListFragment extends Fragment {
 
     String filepath = String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (ViewGroup) inflater.inflate(R.layout.playlist, container, false);
+        ContentResolver mResolver = getActivity().getContentResolver();
+        getNativeAudio(mResolver, view);
         return view;
 
     }
@@ -48,9 +55,6 @@ public class PlayListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ContentResolver mResolver = getActivity().getContentResolver();
-
-        getNativeAudio(mResolver, view);
     }
 
     public void getNativeAudio(ContentResolver mResolver,View view) {   //获取本地歌曲
@@ -63,7 +67,6 @@ public class PlayListFragment extends Fragment {
         cursor.moveToFirst();
         int counter = cursor.getCount();
 
-        List<Song> songList = new ArrayList<>();
         ListView listView = (ListView) view.findViewById(R.id.PlayListView);
 
         for(int i = 0; i<counter;i++){
@@ -74,8 +77,10 @@ public class PlayListFragment extends Fragment {
             String Artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
             //获取文件路径
             String Path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            //获取专辑名
+            String Album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
             //构造Listview
-            Song song = new Song(Title,Artist,Path);
+            Song song = new Song(Title,Artist,Path,Album);
             songList.add(song);
             cursor.moveToNext();
         }
@@ -98,6 +103,9 @@ public class PlayListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Song song = songList.get(i);
                 mainActivity.initMediaPlayer(song);
+                Button playPause = (Button) getActivity().findViewById(R.id.PlayPause);
+                playPause.setText("暂停");
+
             }
         });
     }
